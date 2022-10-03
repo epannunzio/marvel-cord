@@ -8,6 +8,6 @@ Projeto desenvolvido durante a Imersão React da Alura
 <img src="./public/img/tela-inicio.png" alt="Tela de início"/>
 
 #### CHAT 
-!
+
 
 
