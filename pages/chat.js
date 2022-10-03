@@ -2,6 +2,7 @@ import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
 import { BiSend } from 'react-icons/bi';
+import { FaShareSquare, FaSpider } from 'react-icons/fa';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/router';
