@@ -5,10 +5,9 @@ Projeto desenvolvido durante a Imersão React da Alura
 <a href="#"> Visualizar projeto </a>
 
 ### TELA DE LOGIN
-![Miranha](https://github.com/epannunzio/marvel-cord/public/img/tela-inicio.png)
-
+<img src="/img/tela-inicio.png" alt="Tela de início"/>
 
 #### CHAT 
-![Miranha](#)
+!
 
 
