@@ -39,29 +39,36 @@ export default function ChatPage() {
     const roteamento = useRouter();
     const usuarioLogado = roteamento.query.username;
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
+        let isMounted = true;
+    
         supabaseClient
             .from('mensagens')
             .select('*')
-            .order('id', { ascending: false})
-            .then(( {data})=>{
-                console.log('Dados da consulta', data);
-                setListaMensagens(data);
+            .order('id', { ascending: false })
+            .then(({ data }) => {
+                if (isMounted) {
+                    console.log('Dados da consulta', data);
+                    setListaMensagens(data);
+                }
             });
-            escutaMensagemEmTempoReal((novaMensagem)=>{
+    
+        const subscription = escutaMensagemEmTempoReal((novaMensagem) => {
+            if (isMounted) {
                 console.log('Nova Mensagem', novaMensagem);
-                if(usuarioLogado != novaMensagem.de){
+                if (usuarioLogado !== novaMensagem.de) {
                     let audio = new Audio(appConfig.soundMiranha);
                     audio.play();
                 }
-                setListaMensagens((valorAtualDaLista)=>{
-                    return[
-                        novaMensagem,
-                        ...valorAtualDaLista,
-                    ]
-                });
-            });
-    }, []);
+                setListaMensagens((valorAtualDaLista) => [novaMensagem, ...valorAtualDaLista]);
+            }
+        });
+    
+        return () => {
+            isMounted = false;
+            subscription.unsubscribe();
+        };
+    }, []);    
 
     function handleNovaMensagem(novaMensagem) {
         const mensagemEnviada = {
@@ -91,7 +98,7 @@ export default function ChatPage() {
             <>
                 <Box styleSheet={{ width: '100%', display: 'flex',  alignItems: 'center', justifyContent: 'space-between' }} >
                     <Text variant='heading5'>
-                         MIRANHA {< FaSpider size={20} />} CHAT
+                         MIRANHA E A TCHURMA {< FaSpider size={20} />} CHAT
                     </Text>
                     <Button
                         variant='tertiary'
@@ -121,7 +128,7 @@ export default function ChatPage() {
         <Box
             styleSheet={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                backgroundImage: `url(https://images.hdqwalls.com/wallpapers/avengers-poster-4k-27.jpg)`, 
+                backgroundImage: `url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3iQ1C7CxrHlLfmeV1luilkwoBOX5ByYLzB0se0pBRn298_2gpQiLjhsjmRTIpaWrYvQ4&usqp=CAU)`, 
                 backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 color: appConfig.theme.colors.neutrals['000']
             }}
@@ -212,6 +219,7 @@ export default function ChatPage() {
                             }}
                         />
 
+
                         <Button
                             variant='tertiary'
                             label={< BiSend size={23} />}
@@ -242,6 +250,14 @@ export default function ChatPage() {
     //Foto, nome e data das Mensagens
     function MessageList(props) {
         console.log(props);
+
+        if (!props.mensagens || props.mensagens.length === 0) {
+            return (
+                <Text styleSheet={{ color: appConfig.theme.colors.neutrals["000"] }}>
+                    Nenhuma mensagem disponível.
+                </Text>
+            );
+        }
         return (
             <Box
                 tag="ul"
@@ -350,23 +366,16 @@ export default function ChatPage() {
                             </Box>
                            {/* Declarativo */}
                            {/* {mensagem.texto.startsWith(':sticker:').toString()} */}
-                           {mensagem.texto.startsWith(':sticker:') ? 
-                               (
-                                    <Image src={mensagem.texto.replace(':sticker:', '')}
-                                    styleSheet={{
-                                        width: '150px',
-                                    }}
-                                    />
-                                ) : (
-                                    mensagem.texto
-                               )}
+                           {mensagem.texto.startsWith(':sticker:') ? (
+                                <Image src={mensagem.texto.replace(':sticker:', '')} styleSheet={{ width: '150px' }} />
+                            ) : (
+                                <Text>{mensagem.texto}</Text>
+                            )}
 
                         </Text>
                     );
                 })}
-
             </Box>
         )
     }
-
 }

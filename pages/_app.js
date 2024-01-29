@@ -8,7 +8,7 @@ function GlobalStyle() {
         list-style: none;
       }
       body {
-        font-family: 'Open Sans', sans-serif;
+        font-family: 'Arial', sans-serif;
       }
     
       ::-webkit-scrollbar {

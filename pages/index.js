@@ -34,7 +34,7 @@ export default function PaginaInicial() {
       <Box
         styleSheet={{
           display: 'flex', alignItems: 'center', justifyContent:'center',
-          backgroundImage: 'url(./img/background.jpg)', backgroundSize: 'cover'
+          backgroundImage: 'url(https://6vezes7.com.br/wp-content/uploads/2023/06/image-4-1024x1024.png)', backgroundSize: 'contain'
         }}
       >
         <Box
